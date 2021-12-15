@@ -11,8 +11,8 @@ class Category(models.Model):
         return self.name
 
 class SubCategory(models.Model):
-    name       = models.CharField(max_length=50)
-    category_id = models.ForeignKey("category", on_delete=models.CASCADE, related_name="subcategory")
+    name     = models.CharField(max_length=50)
+    category = models.ForeignKey("category", on_delete=models.CASCADE, related_name="subcategory")
     
     class Meta:
         db_table = "subcategory"
@@ -30,10 +30,10 @@ class Tag(models.Model):
         return self.name
 
 class Text(models.Model):
-    name          = models.CharField(max_length=50)
-    category_id    = models.ForeignKey("category", on_delete=models.CASCADE, related_name="text")
-    subCategory_id = models.ForeignKey("subcategory", on_delete=models.CASCADE, related_name="text")
-    tag           = models.ForeignKey("tag", on_delete=models.CASCADE, related_name="text")
+    name        = models.CharField(max_length=50)
+    category    = models.ForeignKey("category", on_delete=models.CASCADE, related_name="text")
+    subcategory = models.ForeignKey("subcategory", on_delete=models.CASCADE, related_name="text")
+    tag         = models.ForeignKey("tag", on_delete=models.CASCADE, related_name="text")
     
     class Meta:
         db_table = "text"
@@ -52,9 +52,9 @@ class Chunk(models.Model):
         return self.name
 
 class TextToChunk(models.Model):
-    text_id  = models.ForeignKey("text", on_delete=models.CASCADE, related_name="text_to_chunk")
-    chunk_id = models.ForeignKey
-    order   = models.IntegerField()
+    text  = models.ForeignKey("text", on_delete=models.CASCADE, related_name="text_to_chunk")
+    chunk = models.ForeignKey("chunk", on_delete=models.CASCADE, related_name="text_to_chunk")
+    order = models.IntegerField()
     
     class Meta:
         db_table = "text_to_chunk"
@@ -64,7 +64,7 @@ class TextToChunk(models.Model):
 
 
 class Dictionary(models.Model):
-    chunk_id    = models.ForeignKey("chunk", on_delete=models.CASCADE, related_name="dictionary")
+    chunk      = models.ForeignKey("chunk", on_delete=models.CASCADE, related_name="dictionary")
     lemma      = models.CharField(max_length=50)
     definition = models.CharField(max_length=500)
 

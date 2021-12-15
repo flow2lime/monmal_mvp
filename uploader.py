@@ -32,7 +32,7 @@ list_of_lists = worksheet.get_all_values()
 # pprint.pprint(list_of_lists[1])
 CATEGORY = '고전문학'
 SUBCATEGORY = '가정문학'
-TAG = ['가정적', '연행록'] ## 리스트 구현 필요
+TAG = ['연행록', '가정적'] ## 리스트 구현 필요
 TEXT = '북학의'
 
 # category upload
@@ -42,10 +42,11 @@ if created:
 
 # subCategory upload
 categoryInfo = Category.objects.get(name = CATEGORY)
+print(categoryInfo.id)
 
 subcategory, created = SubCategory.objects.get_or_create(
-    name       = SUBCATEGORY,
-    category_id = categoryInfo.id
+    name     = SUBCATEGORY,
+    category = Category.objects.get(name = CATEGORY)
     )
 if created:
     print(f"success created {subcategory}")
@@ -58,10 +59,10 @@ for item in TAG:
 
 # text upload
 text, created = Text.objects.get_or_create(
-    name          = TEXT,
-    category_id    = Category.objects.get(name = CATEGORY).id,
-    subCategory_id = SubCategory.objects.get(name = SUBCATEGORY).id,
-    tag           = 1
+    name        = TEXT,
+    category    = Category.objects.get(name = CATEGORY),
+    subcategory = SubCategory.objects.get(name = SUBCATEGORY),
+    tag         = Tag.objects.get(name = TAG)
     )
 if created:
     print(f"success created {category}")
@@ -79,10 +80,11 @@ textInfo  = Text.objects.get(name = TEXT)
 for row in list_of_lists:
     print(row) # ['1', '2', '세기']
     textToChunk, created = TextToChunk.objects.get_or_create(
-        text_id  = textInfo.id,
-        chunk_id = Chunk.objects.get(name = row[2]).id,
-        order   = row[1] 
+        text  = Text.objects.get(name = TEXT),
+        chunk = Chunk.objects.get(name = row[2]),
+        order = row[1] 
         )
     if created:
-        print(f"success created {textToChunk}")
+        # print(f"success created {textToChunk}")
+        print('success created')
 
